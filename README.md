@@ -10,7 +10,7 @@ You can interact with the live AI Threat Intelligence Agent directly in your bro
 
 **[Launch the AI Threat Intelligence Agent Here](https://app.relevanceai.com/agents/bcbe5a/d01a034c-313c-46cb-bced-4318138cb0a9/f5237a7a-58b2-41c8-92cc-9971a6ed65c2/embed-chat?hide_tool_steps=false&hide_file_uploads=false&hide_conversation_list=false&bubble_style=agent&primary_color=%23685FFF&bubble_icon=pd%2Fchat&input_placeholder_text=Type+your+message...&hide_logo=false&hide_description=false)**
 
-### 🧪 Sample Prompt Used to Test the Agent
+###  Sample Prompt Used to Test the Agent
 Want to see it in action? Copy and paste the mock incident escalation below into the agent's chat:
 
 ```text
