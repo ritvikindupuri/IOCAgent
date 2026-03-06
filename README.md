@@ -1,1 +1,95 @@
-# IOCAgent
+# 🛡️ AI Threat Intelligence Agent for Automated IOC Extraction & Hunting
+
+## Executive Summary
+This project features a fully adaptive, multi-tool **Cybersecurity AI Agent** built on the **Relevance AI** framework. It is designed to act as an autonomous Tier 2/Tier 3 SOC Analyst, capable of transforming unstructured security artifacts (SIEM logs, raw intelligence reports, PDF documents) into structured, actionable threat intelligence.
+
+The core engineering philosophy of this agent is **Dynamic Over Static**. Instead of relying on hardcoded threat assumptions or easily-stale reputation lists, the agent leverages format-based extraction, real-time web intelligence gathering, and dynamic LLM reasoning to identify Indicators of Compromise (IOCs), map them to the MITRE ATT&CK framework, and generate platform-agnostic threat hunting queries.
+
+## 🚀 Live Demo: Try the Agent
+You can interact with the live AI Threat Intelligence Agent directly in your browser. Paste in a raw phishing email, a snippet of SIEM logs, or a threat report, and watch it autonomously extract IOCs and generate Splunk/Sentinel queries.
+
+**[Launch the AI Threat Intelligence Agent Here](https://app.relevanceai.com/agents/bcbe5a/d01a034c-313c-46cb-bced-4318138cb0a9/f5237a7a-58b2-41c8-92cc-9971a6ed65c2/embed-chat?hide_tool_steps=false&hide_file_uploads=false&hide_conversation_list=false&bubble_style=agent&primary_color=%23685FFF&bubble_icon=pd%2Fchat&input_placeholder_text=Type+your+message...&hide_logo=false&hide_description=false)**
+
+## 🏗️ System Architecture & Design Philosophy
+
+The agent is configured with a deterministic runtime (Temperature: 0.0) to ensure consistent, reliable forensic analysis. It orchestrates a complex ecosystem of Python environments, SQL databases, and web scraping tools.
+
+<p align="center">
+  <img src=".assets/Screenshot 2026-03-05 231618.png" alt="Agent System Prompt and Architecture" width="700"/>
+  <br>
+  <b>Figure 1: Agent Configuration & Dynamic Threat Analysis Engine</b>
+</p>
+
+### The "Dynamic Over Static" Paradigm:
+* **Format-Based Extraction:** Extracts entities (IPv4, domains, hashes) via Regex/Python based purely on format, deferring maliciousness judgments to the dynamic analysis phase.
+* **Context-Aware Analysis:** Evaluates threats based on the specific incident context rather than historical, isolated assumptions.
+* **Platform Agnostic:** Dynamically generates SIEM queries (Splunk, Sentinel, Elastic, CrowdStrike) adapted to current syntax rather than hardcoded rules.
+
+---
+
+## ⚙️ Tool Integration Ecosystem
+
+To achieve full autonomy, the agent is equipped with a comprehensive suite of external tools, allowing it to ingest varied data formats and conduct live OSINT research.
+
+<p align="center">
+  <img src=".assets/Screenshot 2026-03-05 233729.png" alt="Relevance AI Tool Ecosystem" width="700"/>
+  <br>
+  <b>Figure 2: Multi-Tool Agent Ecosystem (Processing, Data, Intelligence)</b>
+</p>
+
+* **Core Processing:** `Python Code` execution for entropy calculations and `Regex` for IOC parsing.
+* **Data Processing:** `DuckDB` for executing high-performance SQL on structured threat feeds, plus tools to extract text from PDFs, CSVs, and Markdowns.
+* **Intelligence Gathering:** `Google Search, Scrape and Summarise` for real-time threat feed lookup and zero-day research.
+
+---
+
+## 🎯 Detailed Analytical Workflow & Outputs
+
+### Phase 1: Format-Based IOC Extraction
+The agent ingests unstructured text (e.g., an incident report) and autonomously isolates all forensic artifacts without bias.
+
+<p align="center">
+  <img src=".assets/Screenshot 2026-03-05 232117.png" alt="Extracted IOCs" width="700"/>
+</p>
+
+* **Extraction Capabilities:** Automatically parses IPv4/IPv6, Domains, URLs, SHA256/MD5 hashes, Email Addresses, File Paths, and Windows Registry Keys.
+* **De-obfuscation:** Detects and extracts encoded payloads (e.g., Base64 encoded PowerShell commands) for downstream analysis.
+
+### Phase 2: Dynamic Threat Analysis & Attribution
+Once extracted, the LLM utilizes its Intelligence Gathering tools to enrich the IOCs, determining their relevance and potential attribution.
+
+<p align="center">
+  <img src=".assets/Screenshot 2026-03-05 232128.png" alt="Dynamic Threat Analysis" width="700"/>
+</p>
+
+* **Contextual Reasoning:** The agent identifies patterns (e.g., subdomains mimicking internal IT updates, use of Tor exit nodes) to build a cohesive narrative.
+* **Attribution Profiling:** Correlates the TTPs (fake update lures, encoded PowerShell, exfiltration) to specific threat actor profiles (e.g., financially motivated APTs).
+
+### Phase 3: MITRE ATT&CK Mapping & SIEM Query Generation
+The agent bridges the gap between intelligence and operations by translating its findings into actionable hunting directives.
+
+<p align="center">
+  <img src=".assets/Screenshot 2026-03-05 232143.png" alt="MITRE Mapping and Splunk Queries" width="700"/>
+</p>
+
+* **Framework Alignment:** Maps observed behaviors to precise MITRE tactics and techniques (e.g., *T1566: Phishing*, *T1059.001: PowerShell*, *T1547.001: Registry Run Keys*).
+* **Automated Query Engineering:** Generates highly optimized, ready-to-execute SIEM queries. (Figure displays **Splunk SPL** tailored for firewall, DNS, and Windows Event Logs, but the agent supports CrowdStrike FQL, Elastic EQL, and Sentinel KQL).
+
+### Phase 4: Automated Containment & Executive Reporting
+The investigation concludes by providing immediate remediation steps for the SOC and a high-level summary for leadership.
+
+<p align="center">
+  <img src=".assets/Screenshot 2026-03-05 232153.png" alt="Containment and Executive Summary" width="700"/>
+</p>
+
+* **Actionable Defense:** Outputs specific, prioritized containment directives (e.g., isolating specific workstations, blocking explicitly identified IPs at the firewall, revoking credentials).
+* **Executive Summary:** Synthesizes the highly technical artifacts into a concise business-risk narrative suitable for CISOs and stakeholders.
+
+---
+
+## 📊 Impact & Operational Outcomes
+
+* **SOC Acceleration:** Reduces the time required to manually parse a threat report, extract IOCs, and write Splunk queries from hours to **under 60 seconds**.
+* **Zero-Day Readiness:** By utilizing live Google Scraping and dynamic LLM reasoning rather than static databases, the agent can attribute and analyze novel infrastructure that is not yet on standard blocklists.
+* **Elimination of Human Error:** The deterministic Python/Regex extraction ensures that no IP address, hidden hash, or obscure registry key is missed during the stress of an active incident.
+* **Seamless Scalability:** The integration of DuckDB and PDF extraction tools allows this single agent architecture to process everything from a single phishing email to a 50-page Mandiant APT report.
